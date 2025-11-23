@@ -44,6 +44,22 @@ func (q *Queries) CreateComment(ctx context.Context, arg CreateCommentParams) (C
 	return i, err
 }
 
+const deleteComment = `-- name: DeleteComment :exec
+DELETE FROM comments
+WHERE comments.id = $1 
+AND comments.user_id = (SELECT users.id FROM users WHERE users.email = $2)
+`
+
+type DeleteCommentParams struct {
+	ID    uuid.UUID
+	Email string
+}
+
+func (q *Queries) DeleteComment(ctx context.Context, arg DeleteCommentParams) error {
+	_, err := q.db.ExecContext(ctx, deleteComment, arg.ID, arg.Email)
+	return err
+}
+
 const listComments = `-- name: ListComments :many
 SELECT c.id, c.user_id, c.content, c.created_at, u.email
 FROM comments c

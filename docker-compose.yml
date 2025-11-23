@@ -53,7 +53,7 @@ services:
     depends_on:
       - go-app
     environment:
-      NEXT_PUBLIC_API_URL: https://go-demo.alangeorge.dev
+      NEXT_PUBLIC_API_URL: http://127.0.0.1:8080
 
 volumes:
   postgres_data:

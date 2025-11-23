@@ -1,46 +1,24 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import "./globals.css";
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const _poppins = Poppins({ weight: ["600"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Go API Demo",
-  description: "Interactive demo for Go API with authentication and comments",
-  generator: "v0.app",
-  icons: {
-    icon: [
-      {
-        url: "/icon-light-32x32.png",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon-dark-32x32.png",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.svg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/apple-icon.png",
-  },
-}
+  description: "Interactive demo for a Go API with authentication and comments",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
-      <body className={`font-sans antialiased`}>
-        {children}
-        <Analytics />
-      </body>
+      <body className={`font-sans antialiased`}>{children}</body>
     </html>
-  )
+  );
 }
+

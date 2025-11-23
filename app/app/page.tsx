@@ -15,8 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { ExternalLink, Send, AlertCircle } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExternalLink, Send } from "lucide-react";
 
 interface Comment {
   id: string;
@@ -39,7 +38,6 @@ interface AuthResponse {
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "";
-console.log("API_URL s:", API_URL);
 
 export default function GoAPIDemo() {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -48,13 +46,11 @@ export default function GoAPIDemo() {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Auth form states
   const [showLogin, setShowLogin] = useState(false);
   const [showSignup, setShowSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // Comment form state
   const [commentContent, setCommentContent] = useState("");
 
   const { toast } = useToast();
@@ -73,7 +69,7 @@ export default function GoAPIDemo() {
         setComments(Array.isArray(data) ? data : []);
       }
     } catch (error) {
-      console.error("[v0] Failed to fetch comments:", error);
+      console.error("Failed to fetch comments:", error);
     }
   };
 
@@ -110,7 +106,7 @@ export default function GoAPIDemo() {
         });
       }
     } catch (error) {
-      console.error("[v0] Login error:", error);
+      console.error("Login error:", error);
       toast({
         title: "Error",
         description: "Failed to login",
@@ -149,7 +145,7 @@ export default function GoAPIDemo() {
         });
       }
     } catch (error) {
-      console.error("[v0] Signup error:", error);
+      console.error("Signup error:", error);
       toast({
         title: "Error",
         description: "Failed to create account",
@@ -191,7 +187,7 @@ export default function GoAPIDemo() {
         });
       }
     } catch (error) {
-      console.error("[v0] Comment post error:", error);
+      console.error("Comment post error:", error);
       toast({
         title: "Error",
         description: "Failed to post comment",
@@ -205,17 +201,15 @@ export default function GoAPIDemo() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container max-w-4xl mx-auto px-4 py-12">
-        {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-balance mb-8">Go API Demo</h1>
 
-          {/* Navigation Links */}
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <a
               href={`${API_URL}/resume`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors shimmer-button"
             >
               Resume
               <ExternalLink className="w-4 h-4" />
@@ -224,16 +218,16 @@ export default function GoAPIDemo() {
               href={`${API_URL}/swagger`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors shimmer-button"
             >
               Swagger
               <ExternalLink className="w-4 h-4" />
             </a>
             <a
-              href="https://github.com/HWCronicus"
+              href="https://github.com/HWCronicus/go-api-demo"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors shimmer-button"
             >
               GitHub
               <ExternalLink className="w-4 h-4" />
@@ -241,26 +235,12 @@ export default function GoAPIDemo() {
           </div>
         </div>
 
-        {!API_URL && (
-          <Alert className="mb-8" variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertTitle>API URL Not Configured</AlertTitle>
-            <AlertDescription>
-              Please set the{" "}
-              <code className="font-mono font-semibold">
-                NEXT_PUBLIC_API_URL
-              </code>{" "}
-              environment variable in the Vars section of the sidebar to connect
-              to your Go API.
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {/* Comments Section */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle>Comments</CardTitle>
-            <CardDescription>Recent comments from the API</CardDescription>
+            <CardDescription>
+              Recent comments some users have posted
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -290,7 +270,6 @@ export default function GoAPIDemo() {
           </CardContent>
         </Card>
 
-        {/* Auth Section */}
         {!isLoggedIn ? (
           <div className="flex gap-4 justify-center mb-8">
             <Button
@@ -301,6 +280,7 @@ export default function GoAPIDemo() {
               variant="default"
               size="lg"
               disabled={!API_URL}
+              className="shimmer-button"
             >
               Log In
             </Button>
@@ -312,6 +292,7 @@ export default function GoAPIDemo() {
               variant="outline"
               size="lg"
               disabled={!API_URL}
+              className="shimmer-button"
             >
               Sign Up
             </Button>
@@ -330,13 +311,13 @@ export default function GoAPIDemo() {
                 setUser(null);
                 toast({ title: "Logged out successfully" });
               }}
+              className="shimmer-button"
             >
               Log Out
             </Button>
           </div>
         )}
 
-        {/* Login Form */}
         {showLogin && !isLoggedIn && (
           <Card className="mb-8">
             <CardHeader>
@@ -354,7 +335,7 @@ export default function GoAPIDemo() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@example.com"
+                    placeholder="person@example.com"
                     required
                   />
                 </div>
@@ -370,13 +351,18 @@ export default function GoAPIDemo() {
                   />
                 </div>
                 <div className="flex gap-2">
-                  <Button type="submit" disabled={isLoading}>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="shimmer-button"
+                  >
                     {isLoading ? "Logging in..." : "Log In"}
                   </Button>
                   <Button
                     type="button"
                     variant="ghost"
                     onClick={() => setShowLogin(false)}
+                    className="shimmer-button"
                   >
                     Cancel
                   </Button>
@@ -386,7 +372,6 @@ export default function GoAPIDemo() {
           </Card>
         )}
 
-        {/* Signup Form */}
         {showSignup && !isLoggedIn && (
           <Card className="mb-8">
             <CardHeader>
@@ -402,7 +387,7 @@ export default function GoAPIDemo() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@example.com"
+                    placeholder="person@example.com"
                     required
                   />
                 </div>
@@ -418,13 +403,18 @@ export default function GoAPIDemo() {
                   />
                 </div>
                 <div className="flex gap-2">
-                  <Button type="submit" disabled={isLoading}>
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="shimmer-button"
+                  >
                     {isLoading ? "Creating account..." : "Sign Up"}
                   </Button>
                   <Button
                     type="button"
                     variant="ghost"
                     onClick={() => setShowSignup(false)}
+                    className="shimmer-button"
                   >
                     Cancel
                   </Button>
@@ -434,7 +424,6 @@ export default function GoAPIDemo() {
           </Card>
         )}
 
-        {/* Comment Form (only when logged in) */}
         {isLoggedIn && (
           <Card>
             <CardHeader>
@@ -453,7 +442,11 @@ export default function GoAPIDemo() {
                     required
                   />
                 </div>
-                <Button type="submit" disabled={isLoading}>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="shimmer-button"
+                >
                   <Send className="w-4 h-4 mr-2" />
                   {isLoading ? "Posting..." : "Post Comment"}
                 </Button>
