@@ -21,9 +21,9 @@ services:
     image: golang:1.25.4-alpine
     container_name: go-server
     restart: unless-stopped
-    working_dir: /app
+    working_dir: /api
     volumes:
-      - ./app:/app
+      - ./api:/api
     ports:
       - "8080:8080"
     command: sh -c "go mod download && go run main.go"

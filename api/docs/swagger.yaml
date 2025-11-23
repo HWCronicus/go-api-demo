@@ -3,216 +3,194 @@ definitions:
   main.CommentResponse:
     properties:
       content:
-        example: This is my comment!
         type: string
       created_at:
-        example: "2024-01-15T10:30:00Z"
+        type: string
+      email:
         type: string
       id:
-        example: "1"
-        type: string
-      user_id:
-        example: "1"
         type: string
     type: object
   main.CreateCommentRequest:
     properties:
       content:
-        example: This is my comment!
         type: string
     type: object
   main.CreateUserRequest:
     properties:
       email:
-        example: john@example.com
         type: string
       password:
-        example: secret123
         type: string
     type: object
   main.ErrorResponse:
     properties:
       error:
-        example: Invalid credentials
         type: string
     type: object
   main.LoginRequest:
     properties:
       email:
-        example: john@example.com
         type: string
       password:
-        example: secret123
         type: string
     type: object
   main.LoginResponse:
     properties:
       token:
-        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         type: string
       user:
         properties:
           email:
-            example: john@example.com
             type: string
           id:
-            example: "1"
             type: string
         type: object
     type: object
   main.UserResponse:
     properties:
       created_at:
-        example: "2024-01-15T10:30:00Z"
         type: string
       email:
-        example: john@example.com
         type: string
       id:
-        example: "1"
         type: string
     type: object
-host: localhost:8080
 info:
   contact:
-    email: support@example.com
+    email: alan.e.george86@gmail.com
     name: API Support
   description: Go Demo API with user authentication and comments
-  license:
-    name: MIT
-    url: https://opensource.org/licenses/MIT
-  termsOfService: http://swagger.io/terms/
   title: Go Demo API
   version: "1.0"
 paths:
   /comment:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Post a new comment (requires JWT authentication)
       parameters:
-        - description: Comment content
-          in: body
-          name: comment
-          required: true
-          schema:
-            $ref: "#/definitions/main.CreateCommentRequest"
+      - description: Comment content
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateCommentRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/main.CommentResponse"
+            $ref: '#/definitions/main.CommentResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
       security:
-        - BearerAuth: []
+      - BearerAuth: []
       summary: Create a comment
       tags:
-        - comments
+      - comments
   /comments:
     get:
       description: List all comments
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: "#/definitions/main.CommentResponse"
+              $ref: '#/definitions/main.CommentResponse'
             type: array
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
       summary: List all comments
       tags:
-        - comments
+      - comments
   /login:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Authenticate with username and password to receive a JWT token
       parameters:
-        - description: Login credentials
-          in: body
-          name: credentials
-          required: true
-          schema:
-            $ref: "#/definitions/main.LoginRequest"
+      - description: Login credentials
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/main.LoginRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/main.LoginResponse"
+            $ref: '#/definitions/main.LoginResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
         "401":
           description: Unauthorized
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
       summary: User login
       tags:
-        - authentication
+      - authentication
   /user:
     post:
       consumes:
-        - application/json
+      - application/json
       description: Register a new user with name and password
       parameters:
-        - description: User registration details
-          in: body
-          name: user
-          required: true
-          schema:
-            $ref: "#/definitions/main.CreateUserRequest"
+      - description: User registration details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateUserRequest'
       produces:
-        - application/json
+      - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: "#/definitions/main.UserResponse"
+            $ref: '#/definitions/main.UserResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: "#/definitions/main.ErrorResponse"
+            $ref: '#/definitions/main.ErrorResponse'
       summary: Create a new user
       tags:
-        - users
+      - users
 securityDefinitions:
   BearerAuth:
-    description: Enter your JWT token (the "Bearer " prefix will be added automatically).
+    description: Type "Bearer" followed by a space and JWT token.
     in: header
     name: Authorization
     type: apiKey
 swagger: "2.0"
-

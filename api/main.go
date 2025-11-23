@@ -76,7 +76,6 @@ type Claims struct {
 // @contact.name API Support
 // @contact.email alan.e.george86@gmail.com
 
-// @host localhost:8080
 // @BasePath /
 
 // @securityDefinitions.apikey BearerAuth
@@ -165,13 +164,13 @@ func validateToken(tokenString string) (*Claims, error) {
 }
 
 func handleIndex(w http.ResponseWriter, r *http.Request) {
-	http.FileServer(http.Dir("./html"))
+	http.FileServer(http.Dir("./html")).ServeHTTP(w, r)
 }
 
 func handleResume(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Disposition", "attachment; filename=resume.pdf")
 	w.Header().Set("Content-Type", "application/pdf")
-	http.ServeFile(w, r, "./resume.pdf")
+	http.ServeFile(w, r, "files/resume.pdf")
 }
 
 // handleCreateUser creates a new user

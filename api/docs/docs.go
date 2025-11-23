@@ -9,14 +9,9 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {
             "name": "API Support",
-            "email": "support@example.com"
-        },
-        "license": {
-            "name": "MIT",
-            "url": "https://opensource.org/licenses/MIT"
+            "email": "alan.e.george86@gmail.com"
         },
         "version": "{{.Version}}"
     },
@@ -219,20 +214,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "content": {
-                    "type": "string",
-                    "example": "This is my comment!"
+                    "type": "string"
                 },
                 "created_at": {
-                    "type": "string",
-                    "example": "2024-01-15T10:30:00Z"
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
                 },
                 "id": {
-                    "type": "string",
-                    "example": "1"
-                },
-                "user_id": {
-                    "type": "string",
-                    "example": "1"
+                    "type": "string"
                 }
             }
         },
@@ -240,8 +231,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "content": {
-                    "type": "string",
-                    "example": "This is my comment!"
+                    "type": "string"
                 }
             }
         },
@@ -249,12 +239,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string",
-                    "example": "john@example.com"
+                    "type": "string"
                 },
                 "password": {
-                    "type": "string",
-                    "example": "secret123"
+                    "type": "string"
                 }
             }
         },
@@ -262,8 +250,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "error": {
-                    "type": "string",
-                    "example": "Invalid credentials"
+                    "type": "string"
                 }
             }
         },
@@ -271,12 +258,10 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "email": {
-                    "type": "string",
-                    "example": "john@example.com"
+                    "type": "string"
                 },
                 "password": {
-                    "type": "string",
-                    "example": "secret123"
+                    "type": "string"
                 }
             }
         },
@@ -284,19 +269,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "string",
-                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    "type": "string"
                 },
                 "user": {
                     "type": "object",
                     "properties": {
                         "email": {
-                            "type": "string",
-                            "example": "john@example.com"
+                            "type": "string"
                         },
                         "id": {
-                            "type": "string",
-                            "example": "1"
+                            "type": "string"
                         }
                     }
                 }
@@ -306,23 +288,20 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_at": {
-                    "type": "string",
-                    "example": "2024-01-15T10:30:00Z"
+                    "type": "string"
                 },
                 "email": {
-                    "type": "string",
-                    "example": "john@example.com"
+                    "type": "string"
                 },
                 "id": {
-                    "type": "string",
-                    "example": "1"
+                    "type": "string"
                 }
             }
         }
     },
     "securityDefinitions": {
         "BearerAuth": {
-            "description": "Enter your JWT token (the \"Bearer \" prefix will be added automatically).",
+            "description": "Type \"Bearer\" followed by a space and JWT token.",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -333,7 +312,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1:8080",
+	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Go Demo API",
