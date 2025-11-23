@@ -397,8 +397,8 @@ func main() {
 	mux.HandleFunc("/comments", handleListComments)
 	mux.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 
-	log.Println("Server starting on :8080")
-	log.Println("Swagger UI available at http://localhost:8080/swagger/")
+	log.Println("Server starting...")
+
 	server := &http.Server{
 		Addr:    ":8080",
 		Handler: mux,
