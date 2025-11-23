@@ -83,6 +83,22 @@ type Claims struct {
 // @name Authorization
 // @description Type "Bearer" followed by a space and JWT token.
 
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Max-Age", "3600")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func authMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
@@ -168,9 +184,9 @@ func handleIndex(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleResume(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Disposition", "attachment; filename=resume.pdf")
+	w.Header().Set("Content-Disposition", "attachment; filename=Alan_George_Resume.pdf")
 	w.Header().Set("Content-Type", "application/pdf")
-	http.ServeFile(w, r, "files/resume.pdf")
+	http.ServeFile(w, r, "files/Alan_George_Resume.pdf")
 }
 
 // handleCreateUser creates a new user
@@ -400,7 +416,7 @@ func main() {
 
 	server := &http.Server{
 		Addr:    ":8080",
-		Handler: mux,
+		Handler: corsMiddleware(mux),
 	}
 	if err := server.ListenAndServe(); err != nil {
 		log.Fatal("Server failed to start:", err)

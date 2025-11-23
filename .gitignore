@@ -29,4 +29,11 @@ go.work.sum
 
 # Editor/IDE
 # .idea/
-# .vscode/
+.vscode/
+
+# Next.js build output
+.next/
+out/
+
+# Node modules
+node_modules/
