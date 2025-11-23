@@ -46,6 +46,15 @@ type CreateCommentRequest struct {
 	Content string `json:"content"`
 }
 
+type DeleteCommentRequest struct {
+	ID    uuid.UUID `json:"id"`
+	Email string    `json:"email"`
+}
+
+type DeleteCommentSuccessResponse struct {
+	Message string `json:"message"`
+}
+
 type UserResponse struct {
 	ID        uuid.UUID `json:"id"`
 	Email     string    `json:"email"`
@@ -389,6 +398,71 @@ func handleListComments(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+// handleDeleteComment deletes a comment (requires authentication)
+// @Summary Delete a comment
+// @Description Delete a comment (requires JWT authentication)
+// @Tags comments
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param comment body DeleteCommentRequest true "Comment deletion details"
+// @Success 200 {object} DeleteCommentSuccessResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
+// @Router /comment [delete]
+func handleDeleteComment(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodDelete {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	claims, ok := r.Context().Value("claims").(*Claims)
+	if !ok {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	ctx := context.Background()
+
+	var req DeleteCommentRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	if req.ID == uuid.Nil {
+		http.Error(w, "ID is required", http.StatusBadRequest)
+		return
+	}
+	user, getUserError := queries.GetUserByEmail(ctx, req.Email)
+
+	if getUserError != nil {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	if user.ID != claims.UserID {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
+	}
+
+	deleteError := queries.DeleteComment(ctx, database.DeleteCommentParams{
+		ID:    req.ID,
+		Email: req.Email,
+	})
+
+	if deleteError != nil {
+		http.Error(w, "Error deleting comment", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(DeleteCommentSuccessResponse{
+		Message: "Comment deleted successfully",
+	})
+}
+
 func main() {
 	if len(jwtSecret) == 0 {
 		log.Fatal("JWT_SECRET environment variable must be set")
@@ -408,7 +482,8 @@ func main() {
 	mux.HandleFunc("/resume", handleResume)
 	mux.HandleFunc("/user", handleCreateUser)
 	mux.HandleFunc("/login", handleLogin)
-	mux.HandleFunc("/comment", authMiddleware(handleCreateComment))
+	mux.HandleFunc("POST /comment", authMiddleware(handleCreateComment))
+	mux.HandleFunc("DELETE /comment", authMiddleware(handleDeleteComment))
 	mux.HandleFunc("/comments", handleListComments)
 	mux.HandleFunc("/swagger/", httpSwagger.WrapHandler)
 

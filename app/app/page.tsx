@@ -15,7 +15,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
-import { ExternalLink, Send } from "lucide-react";
+import { ExternalLink, Send, Trash2 } from "lucide-react";
 
 interface Comment {
   id: string;
@@ -52,6 +52,9 @@ export default function GoAPIDemo() {
   const [password, setPassword] = useState("");
 
   const [commentContent, setCommentContent] = useState("");
+  const [deletingCommentId, setDeletingCommentId] = useState<string | null>(
+    null
+  );
 
   const { toast } = useToast();
 
@@ -198,6 +201,52 @@ export default function GoAPIDemo() {
     }
   };
 
+  const handleDeleteComment = async (commentId: string) => {
+    setDeletingCommentId(commentId);
+    if (user?.email == null) {
+      toast({
+        title: "Error",
+        description: "User email not found",
+        variant: "destructive",
+      });
+      setDeletingCommentId(null);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/comment`, {
+        method: "DELETE",
+        headers: {
+          Authorization: token,
+        },
+        body: JSON.stringify({ id: commentId, email: user.email }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Comment deleted",
+          description: "Your comment has been removed successfully",
+        });
+        fetchComments();
+      } else {
+        toast({
+          title: "Failed to delete comment",
+          description: "Could not remove your comment",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Delete comment error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete comment",
+        variant: "destructive",
+      });
+    } finally {
+      setDeletingCommentId(null);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container max-w-4xl mx-auto px-4 py-12">
@@ -258,9 +307,23 @@ export default function GoAPIDemo() {
                       <span className="text-sm font-medium text-primary">
                         {comment.email}
                       </span>
-                      <span className="text-xs text-muted-foreground">
-                        {new Date(comment.created_at).toLocaleDateString()}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">
+                          {new Date(comment.created_at).toLocaleDateString()}
+                        </span>
+                        {isLoggedIn && user?.email === comment.email && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleDeleteComment(comment.id)}
+                            disabled={deletingCommentId === comment.id}
+                            className="h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10 shimmer-button"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                            <span className="sr-only">Delete comment</span>
+                          </Button>
+                        )}
+                      </div>
                     </div>
                     <p className="text-foreground">{comment.content}</p>
                   </div>
