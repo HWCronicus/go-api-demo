@@ -252,10 +252,39 @@ export default function GoAPIDemo() {
       <div className="container max-w-4xl mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-balance mb-8">Go API Demo</h1>
-
+          <h4 className="text-lg text-muted-foreground mb-6">
+            Simple UI to go with a Go backend API featuring authentication and
+            comments.
+          </h4>
+          <p className="text-sm text-muted-foreground mb-6">
+            This was a quick weekend project by Alan George (HWCronicus) to
+            demonstrate that I have{" "}
+            <span className="line-through">mediocre</span> backend Go skills.
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            The source code for this project is available on{" "}
+            <a href="https://github.com/HWCronicus/go-api-demo">GitHub</a>, and
+            the backend API is fully documented with Swagger.
+          </p>
+          <p className="text-sm text-muted-foreground mb-6">
+            Tech stack:
+            <ul className="list-disc list-inside">
+              <li>
+                Backend: Go, <a href="github.com/lib/pq">PostgreSQL</a> ,{" "}
+                <a href="github.com/golang-jwt/jwt/v5 ">JWT</a>,{" "}
+                <a href="https://github.com/sqlc-dev/sqlc">SQLC</a>,{" "}
+                <a href="github.com/swaggo/swag">Swag</a>
+              </li>
+              <li>Frontend: Next.js, React, TypeScript, Tailwind CSS</li>
+              <li>
+                Infra: Docker containers on my home lab proxied through
+                Cloudflare
+              </li>
+            </ul>
+          </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <a
-              href={`${API_URL}/resume`}
+              href="/resume"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors shimmer-button"
@@ -278,7 +307,7 @@ export default function GoAPIDemo() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-6 py-2 rounded-lg border border-border hover:bg-accent transition-colors shimmer-button"
             >
-              GitHub
+              GitHub Repo
               <ExternalLink className="w-4 h-4" />
             </a>
           </div>
